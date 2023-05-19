@@ -1,37 +1,32 @@
-import tkinter as tk
-import pyaudio
+# pip install pyside6
 
-def play_sound():
-    chunk = 1024
-    p = pyaudio.PyAudio()
+# Estudo de PySide -> principais componentes QtCore, QtGui e QtWidgets.
 
-    stream = p.open(format=pyaudio.paInt16,
-                    channels=1,
-                    rate=44100,
-                    input=True,
-                    output=True,
-                    frames_per_buffer=chunk)
+from PySide6.QtCore import Qt  # serve para fazer o alinhamento
+from PySide6.QtGui import QFont
+from PySide6.QtWidgets import ( 
+    QApplication, QLabel, QPushButton, QWidget, QGridLayout
+) # QGridLayout serve para posicionar em grid  https://doc.qt.io/qt-6/layout.html
 
-    data = stream.read(chunk)
+app = QApplication()
+base = QWidget() # Widget base para inserir os outros dentro
+layout = QGridLayout()
 
-    while data:
-        stream.write(data)
-        data = stream.read(chunk)
+# Style
+font = QFont()
+font.setPixelSize(20)
+font.setBold(1)
 
-    stream.stop_stream()
-    stream.close()
+label = QLabel("Mesa de Efeitos Sonoros")
+label.setFont(font)
+label.setAlignment(Qt.AlignCenter)
 
-    p.terminate()
+botao = QPushButton("clique")
 
-def button_click():
-    play_sound()
+# Adicionando os Widgets ao layout (no caso no grid)
+layout.addWidget(label)
+layout.addWidget(botao)
 
-# Crie a interface gráfica usando tkinter
-root = tk.Tk()
-
-# Crie um botão para reproduzir o som
-button = tk.Button(root, text="Reproduzir Som", command=button_click)
-button.pack()
-
-# Inicie o loop principal do tkinter
-root.mainloop()
+base.setLayout(layout)
+base.show()
+app.exec()
